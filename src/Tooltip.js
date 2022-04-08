@@ -26,6 +26,8 @@ type State = {
 
 type Props = {
   withPointer: boolean,
+  isVisible:Boolean,
+  toggleTooltip:()=>void,
   popover: React.Element,
   height: number | string,
   width: number | string,
