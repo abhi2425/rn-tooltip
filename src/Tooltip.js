@@ -46,7 +46,7 @@ type Props = {
 
 class Tooltip extends React.Component<Props, State> {
   state = {
-    isVisible: false,
+    isVisible: this.props.isVisible,
     yOffset: 0,
     xOffset: 0,
     elementWidth: 0,
@@ -57,15 +57,8 @@ class Tooltip extends React.Component<Props, State> {
   timeout;
 
   toggleTooltip = () => {
-    const { onClose } = this.props;
     this.getElementPosition();
-    this.setState(prevState => {
-      if (prevState.isVisible && !isIOS) {
-        onClose && onClose();
-      }
-
-      return { isVisible: !prevState.isVisible };
-    });
+    this.props.toggleTooltip && this.props.toggleTooltip()
   };
 
   wrapWithAction = (actionType, children) => {
@@ -220,7 +213,7 @@ class Tooltip extends React.Component<Props, State> {
   };
 
   render() {
-    const { isVisible } = this.state;
+    const { isVisible } = this.props.isVisible;
     const { onClose, withOverlay, onOpen, overlayColor } = this.props;
 
     return (
@@ -249,6 +242,8 @@ class Tooltip extends React.Component<Props, State> {
 
 Tooltip.propTypes = {
   children: PropTypes.element,
+  isVisible: PropTypes.bool,
+  toggleTooltip:PropTypes.func,
   withPointer: PropTypes.bool,
   popover: PropTypes.element,
   height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -268,6 +263,8 @@ Tooltip.propTypes = {
 
 Tooltip.defaultProps = {
   toggleWrapperProps: {},
+  isVisible: false,
+  toggleTooltip:()=>{},
   withOverlay: true,
   highlightColor: 'transparent',
   withPointer: true,
